@@ -11,9 +11,9 @@ const validateLoginInput = require("../validation/login");
 
 
 
-// router.get('/login', (req, res) => res.render('login'));
+// router.get('/login', (req, res) => res.send('login'));
 
-// router.get('/register', (req, res) => res.render('register'));
+// router.get('/register', (req, res) => res.send('register'));
 
 router.post('/register', (req, res) => {
     const {errors, isValid} = validateRegisterInput(req.body);
@@ -64,11 +64,13 @@ router.post('/login', (req, res) => {
       }
       bcrypt.compare(password, user.password).then(isMatch => {
         if (isMatch) {
+          console.log("Pass Match");
             // Create JWT Payload
             const payload = {
                 id: user.id,
                 name: user.name
-            };
+            }
+            console.log(payload); 
 
             // Sign token
             jwt.sign(
@@ -77,7 +79,9 @@ router.post('/login', (req, res) => {
                 {
                  expiresIn: 41512810 
                 }
-            );
+            )
+            console.log("jwt Done alsso");
+            // res.redirect('/dashboard')
         } else {
           return res
             .status(400)
